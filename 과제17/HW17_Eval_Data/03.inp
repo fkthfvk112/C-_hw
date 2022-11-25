@@ -1,0 +1,86 @@
+int pointSum(pair<int,int> c1Vertices){
+    return c1Vertices.first + c1Vertices.second;
+}
+
+void print(int number, int cycleTime, vector<int>& dis, vector<pair<int,int>>& ver){
+    int sum = 0;
+    int index = 0;
+
+    while(cycleTime >= sum + dis[index]) {
+        sum += dis[index++];
+    }
+
+    int value = cycleTime - sum;
+    int X = ver[index].first;
+    int Y = ver[index].second;
+
+    if (X < next.first) {
+        X += value;
+    }
+    if (X > next.first) {
+        X -= value;
+    }
+    if (Y < next.second) {
+        Y += value;
+    }
+    if (Y > next.second) {
+        Y -= value;
+    }
+    cout << X << " " << Y << endl;
+}
+
+int main(){
+    int number, x, y;
+    vector<pair<int,int>> c1Vertices, c2Vertices;
+    vector<int> c1Lines, c2Lines;
+    cin >> number;
+    for (int i = 0; i< number; i++){
+        cin >> x >> y;
+    }
+
+    int sum = 0;
+    int diff;
+    for(int i = 0; i< number; i++){
+        diff = abs(pointSum(c1Vertices[i]) - pointSum(c1Vertices[i+1]));
+        c1Lines.push_back(diff);
+        sum += diff;
+    }
+
+    for (int i = number/2-1; i >= 0; i--) {
+        c2Vertices.push_back();
+    }
+    for (int i = number-1; i>= number/2-1; i--) {
+        c2Vertices.push_back();
+    }
+    for (int i = 0; i< number; i++) {
+        c2Lines.push_back(abs(pointSum(c2Vertices[i]) - pointSum(c2Vertices[i+1])));
+    }
+
+    int time, distance;
+    cin >> time;
+    int cycleTime = time % sum;
+    bool change = false;
+    for (int i = 0; i<number/2-1; i++) { 
+        distance += c1Lines[i];
+    }
+    int div = distance/2;
+    int left = (sum - distance)/2;
+
+    if (distance%2){
+        div--;
+        left--;
+    }
+    if (div+1<= cycleTime && cycleTime <= sum - left) {
+        change = true;
+    }
+
+    if (change){
+        print(number,cycleTime,c2Lines,c2Vertices);
+        print(number,cycleTime,c1Lines,c1Vertices);
+    }
+    else{
+        print(number,cycleTime,c1Lines,c1Vertices);
+        print(number,cycleTime,c2Lines,c2Vertices);
+    }
+
+}

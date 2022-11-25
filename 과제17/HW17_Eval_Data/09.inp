@@ -1,0 +1,50 @@
+int containerWeigh(Container container){
+    int sum = 0;
+    for(auto carrier : container){
+        sum += carrier[1];
+    }
+    return sum;
+}
+void pushCarrier(Container& container, int carrier_number, int carrier_weight){
+    Carrier carrier(2);
+    carrier[0] = carrier_number;
+    carrier[1] = carrier_weight;
+    container.push_back(carrier);
+}
+void createNewContainer(vector<Container>& containers, int carrier_number, int carrier_weight){
+    Container container;
+    pushCarrier(container, carrier_number, carrier_weight);
+    containers.push_back(container);
+}
+void printContainers(vector<Container>& containers){
+    for(auto container : containers){
+        for(auto carrier : container){
+            cout << carrier[0] << " ";
+        }
+        cout << '\n';
+    }
+}
+
+
+int main(){
+    int N;
+    vector<Container> containers;
+    cin >> N;
+    for(int carrier_number = 1; carrier_number <= N; carrier_number++){
+        int carrier_weight;
+        cin >> carrier_weight;
+        bool push_success = false;
+        for(auto &container: containers){
+            if(containerWeigh(container) + carrier_weight <= 100){
+                pushCarrier(container, carrier_number, carrier_weight);
+                push_success = true;
+                break;
+            }
+        }
+        if(!push_success) {
+            createNewContainer(containers, carrier_number, carrier_weight);
+        }
+    }
+    printContainers(containers);
+    return 0;
+}

@@ -1,0 +1,27 @@
+600
+show a
+write A 100
+write a 20
+write B 100
+write b 20
+write C 100
+write c 20
+write D 100
+write d 20
+write E 100
+write e 20
+show a
+show b
+show c
+show d
+show e
+write BIG 100
+show BIG
+delete a
+delete b
+delete c
+delete d
+delete e
+write BIG 100
+show BIG
+end

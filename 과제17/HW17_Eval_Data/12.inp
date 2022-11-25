@@ -1,0 +1,108 @@
+void unite_disk(list<data>& disk) {
+    auto buf_iter = disk.begin();
+    for (auto iter = ++disk.begin(); iter != disk.end(); iter++) {
+        if (buf_iter->first == iter->first) {
+            buf_iter->second += iter->second;
+            iter = --disk.erase(iter);
+            buf_iter--;
+        }
+        buf_iter++;
+    }
+}
+
+auto find_file(list<data>& disk, string data_name, bool change) {
+    data found = make_pair("", 0);
+    int position = 0;
+
+    for (auto iter = disk.begin(); iter != disk.end(); iter++) {
+        if (iter->first == data_name) {
+            if (change) {
+                iter->first = "blank";
+            }
+            found = make_pair(found.first + " " + to_string(position), found.second += iter->second);
+        }
+        position += iter->second;
+    }
+    return found;
+}
+
+int main() {
+    list<data> mydisk;
+    int disk_size, file_size;
+    string command, file_name;
+    bool found = false;
+
+    cin >> disk_size;
+    mydisk.emplace_back("blank", disk_size);
+
+    while(true) {
+        cin >> command;
+
+        if (command == "write") {
+            cin >> file_name >> file_size;
+            if (disk_size >= file_size) {
+                bool toggle = true;
+                disk_size -= file_size;
+                for (auto iter = mydisk.begin(); iter != mydisk.end(); iter++) {
+                    if (iter->first == "blank" && iter->second >= file_size) {
+                        iter->second -= file_size;
+                        mydisk.insert(iter, make_pair(file_name, file_size));
+                        toggle = false;
+                        break;
+                    }
+                }
+                if (toggle) {
+                    for (auto iter = mydisk.begin(); iter != mydisk.end(); iter++) {
+                        if (iter->first == "blank" && iter->second < file_size) {
+                            iter->first = file_name;
+                            file_size -= iter->second;
+                        }
+                        else if (iter->first == "blank" && iter->second >= file_size) {
+                            iter->second -= file_size;
+                            mydisk.insert(iter, make_pair(file_name, file_size));
+                            break;
+                        }
+                    }
+                }
+            }
+            else {
+                cout << "diskfull" << endl;
+            }
+        }
+        else if (command == "show") {
+            cin >> file_name;
+            data result = find_file(mydisk, file_name, false);
+            if (result.second == 0) {
+                cout << "error" << endl;
+            }
+            else {
+                result.first.erase(result.first.begin());
+                cout << result.first << endl;
+            }
+        }
+        else if (command == "delete") {
+            cin >> file_name;
+            data result = find_file(mydisk, file_name, true);
+            if (result.second == 0) {
+                cout << "error" << endl;
+            }
+            else {
+                unite_disk(mydisk);
+                disk_size += result.second;
+            }
+        }
+        else if (command == "compact") {
+            mydisk.emplace_back("blank", 0);
+            for (auto iter = mydisk.begin(); iter != --mydisk.end(); iter++) {
+                if (iter->first == "blank") {
+                    (mydisk.rbegin())->second += iter->second;
+                    iter = --mydisk.erase(iter);
+                }
+            }
+            unite_disk(mydisk);
+        }
+        else if (command == "end") {
+            break;
+        }
+    }
+}

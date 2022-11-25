@@ -1,0 +1,54 @@
+int* make_arrays(struct point* p, int* move, int* secStamp){
+    for(i=0; i<dotsNum-1; i++){
+        move[i] = (p[i+1].y-p[i].y) + (p[i+1].x-p[i].x);
+    }
+    move[dotsNum-1] = (p[0].x-p[dotsNum-1].x)+(p[0].y-p[dotsNum-1].y);
+
+    secStamp[0]=0;
+    for(i=1;i<dotsNum+1;i++){
+        secStamp[i] = secStamp[i-1] + abs(move[i-1]);
+    }
+    stamp = secStamp[dotsNum];
+    return  secStamp;
+}
+void get_points(struct point* p, int* move, int* secStamp){
+    int l,cnt=0;
+    struct point where_is_it;
+    int time[5];
+    scanf("%d %d %d %d %d", &time[0], &time[1],&time[2],&time[3],&time[4]);
+    for(i=0;i<5;i++){
+        time[i] = time[i]%stamp;
+    }
+
+    while(cnt<5){
+        for(l=0;l<dotsNum+1;l++){
+            if(time[cnt]<=secStamp[l]) break;
+        }
+        if(l==0){
+            where_is_it.x = p[0].x;
+            where_is_it.y = p[0].y;
+        }
+        if((p[l].x-p[l-1].x)==0){
+            where_is_it.x=p[l-1].x;
+            where_is_it.y=p[l-1].y + (move[l-1]/abs(move[l-1]))*(time[cnt] - secStamp[l-1]);
+        }
+        else{
+            where_is_it.x= p[l-1].x + (move[l-1]/abs(move[l-1]))*(time[cnt] - secStamp[l-1]);
+            where_is_it.y =p[l-1].y;
+        }
+        printf("%d %d\n", where_is_it.x, where_is_it.y);
+        cnt++;
+    }
+    return;
+}
+int main(){
+    scanf("%d", &dotsNum);
+    struct point p[dotsNum];
+    int move[dotsNum], secStamp[dotsNum+1];
+
+    make_points(p);
+    make_arrays(p,move,secStamp);
+    get_points(p,move,secStamp);
+
+    return 0;
+}

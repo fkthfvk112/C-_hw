@@ -1,0 +1,134 @@
+void cmdInit() {
+    cmdMap["write"] = WRITE;
+    cmdMap["delete"] = DELETE;
+    cmdMap["show"] = SHOW;
+    cmdMap["compact"] = COMPACT;
+    cmdMap["end"] = END;
+}
+void writeFile(string name, int size ) {
+    if(size > remain) {
+        cout << "diskfull\n";
+    }
+    else if(findFile(name) != memory.end()) {
+        error();
+    }
+    else {
+        remain -= size;
+        int nowAddress = 0;
+        for(FileIterator it=memory.begin();it!=memory.end();it++) {
+            if(it->address - nowAddress >= size) {
+                memory.insert();
+                return;
+            }
+            nowAddress = it->address + it->size;
+        }
+        if(capacity - nowAddress >= size) {
+            memory.insert();
+            return;
+        }
+        nowAddress = 0;
+        for(FileIterator it=memory.begin();it!=memory.end();it++) {
+            int gap = it->address - nowAddress;
+            if(gap != 0) {
+                if(gap < size) {
+                    memory.insert();
+                }
+                else {
+                    memory.insert();
+                    return;
+                }
+            }
+            nowAddress = it->address + it->size;
+            size -= gap;
+        }
+        if(size!=0) {
+            memory.insert();
+        }
+    }
+}
+void deleteFile(string name) {
+    if(findFile(name) == memory.end()) {
+        error();
+    }
+    else {
+        for(FileIterator it = memory.begin();it!=memory.end();) {
+            if(it->name.compare(name) == 0) {
+                remain += it->size;
+                it = memory.erase(it);
+            }
+            else {
+                it++;
+            }
+        }
+    }
+}
+void showFile(string name) {
+    if(findFile(name) == memory.end()) {
+        error();
+    }
+    else {
+        for(FileIterator it = memory.begin();it!=memory.end();it++) {
+            if(it->name.compare(name) == 0) {
+                cout << it->address << " ";
+            }
+        }
+        cout << "\n";
+    }
+}
+void compactFile() {
+    FileIterator now = memory.begin();
+    while(now != memory.end()) {
+        FileIterator back = now++;
+        if(back == memory.begin()) {
+            back->address = 0;
+        }
+        if(now == memory.end()) {
+            break; 
+        }
+        else if(now->name.compare(back->name)==0) {
+            back->size += now->size;
+            memory.erase(now);
+            now = back;
+        }
+        else {
+            now->address = back->address+back->size;
+        }
+    }
+}
+
+int main() {
+    int capacity;
+    cin >> capacity;
+    Disk disk(capacity);
+    cmdInit();
+    while(true) {
+        string cmd;
+        cin >> cmd;
+        switch(cmdMap[cmd]) {
+            case WRITE: {
+                string name;
+                int size;
+                cin >> name >> size;
+                disk.writeFile(name,size);
+                break;
+            }
+            case DELETE: {
+                string name;
+                cin >> name;
+                disk.deleteFile(name);
+                break;
+            }
+            case SHOW: {
+                string name;
+                cin >> name;
+                disk.showFile(name);
+                break;
+            }
+            case COMPACT: {
+                disk.compactFile();
+                break;
+            }
+            default: return 0;
+        }
+    }
+}

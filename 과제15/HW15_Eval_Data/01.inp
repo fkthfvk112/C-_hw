@@ -1,0 +1,15 @@
+100
+write A 33
+write B 33
+write C 33
+show A
+show B
+show C
+delete A
+write D 34
+show D
+delete B
+delete C
+compact
+show D
+end

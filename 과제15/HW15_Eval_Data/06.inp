@@ -1,0 +1,19 @@
+10000
+write RGE 5000
+write SKT 1000
+delete RGE
+compact
+show SKT
+write JDG 1000
+write RNG 5000
+write DWG 5000
+write GEN 1000
+delete RNG
+show GEN
+compact
+show DWG
+write DRX 1000
+delete JDG
+compact
+show DRX
+end

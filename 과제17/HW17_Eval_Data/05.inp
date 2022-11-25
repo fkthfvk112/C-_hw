@@ -1,0 +1,74 @@
+void inputData(vector<pii> &columnBasedPos, int N){
+    int inputNum, ypos = 1;
+
+    while (ypos <= N){
+        cin >> inputNum;
+        if (inputNum == 0){
+            int zeroLineCount;
+            cin >> zeroLineCount;
+            ypos += zeroLineCount;
+        }
+        else{
+            columnBasedPos.push_back(make_pair(inputNum, ypos));
+
+            cin >> inputNum;
+            while (inputNum != 0){
+                columnBasedPos.push_back(make_pair(inputNum, ypos));
+                cin >> inputNum;
+            }
+            ypos++;
+        }
+    }
+}
+
+bool comp(pii &a, pii &b) {
+    if (a.first < b.first){
+        return true;
+    }
+    if (a.first == b.first && a.second < b.second){
+        return true;
+    }
+    return false;
+}
+
+void printResult(vector<pii> &columnBasedPos, int N){
+    cout << N << '\n';
+
+    int previousXpos = 0;
+    for (auto it = columnBasedPos.begin(); it != columnBasedPos.end(); it++){
+        int currentXpos = it->first;
+
+        if (abs(currentXpos - previousXpos) > 1){
+            cout << "0 " << currentXpos - previousXpos - 1 << '\n';
+            previousXpos = currentXpos - 1;
+        }
+
+        while(it->first == currentXpos){
+            cout << it->second << " ";
+            it++;
+        }
+        it--;
+        cout << "0\n";
+
+        previousXpos = currentXpos;
+    }
+
+    if (previousXpos != N){
+        cout << "0 " << N - previousXpos << '\n';
+    }
+}
+
+
+int main(){
+    int N;
+    cin >> N;
+    vector<pii> columnBasedPos;
+
+    inputData(columnBasedPos, N);
+
+    sort(columnBasedPos.begin(), columnBasedPos.end(), comp);
+
+    printResult(columnBasedPos, N);
+
+    return 0;
+}

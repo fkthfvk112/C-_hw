@@ -1,0 +1,41 @@
+void input(array<int,N>& arr,set<int>& non_zero){
+    int num_of_func, num_of_term;
+    cin>>num_of_func;
+    for(int i = 0; i < num_of_func;i++){
+        cin>>num_of_term;
+        for(int i = 0; i< num_of_term;i++){
+            int coefficient ,exponent;
+            cin>>coefficient>>exponent;
+            exponent += 1000;
+            arr.at(exponent) += coefficient;
+            if(arr.at(exponent)!=0) {
+                non_zero.insert(exponent);
+            }
+            else {
+                non_zero.erase(exponent);
+            }
+        }
+    }
+
+}
+
+void output(const array<int,N>& arr,const set<int>& non_zero) {
+    cout <<non_zero.size();
+    if(non_zero.size()==0){
+        cout<<" 0"<<endl;
+        return;
+    }
+    else {
+        cout<<endl;
+    }
+    for(auto x = non_zero.crbegin();x != non_zero.crend();x++){
+        cout<<arr.at(*x)<<" "<<*x-1000<<endl;
+    }
+}
+
+int main(){
+    set<int> non_zero;
+    array<int,N> input_array;
+    input(input_array,non_zero);
+    output(input_array,non_zero);
+}

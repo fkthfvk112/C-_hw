@@ -1,0 +1,38 @@
+100
+write aa 5
+show aa
+write bb 5
+write cc 5
+show cc
+write dd 5
+write ee 5
+show ee
+write ff 5
+write gg 5
+show gg
+write hh 5
+write ii 5
+show ii
+write jj 5
+write kk 5
+show kk
+write ll 5
+write mm 5
+show mm
+delete bb
+delete dd
+delete ff
+delete hh
+delete jj
+delete ll
+write BIG 65
+show BIG
+delete aa
+delete cc
+delete ee
+delete gg
+delete ii
+delete kk
+compact
+show BIG
+end

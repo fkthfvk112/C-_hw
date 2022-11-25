@@ -1,0 +1,18 @@
+10
+write AAA 3
+write BBB 1
+write CCC 4
+delete BBB
+show CCC
+write DDD 2
+delete CCC
+show DDD
+write EEE 3
+show EEE
+delete AAA
+compact
+show EEE
+delete EEE
+compact
+show DDD
+end

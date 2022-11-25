@@ -1,0 +1,51 @@
+bool check(map<string,int>& name_index,string to_find){
+    map<string,int>::iterator it;
+    it=name_index.find(to_find);
+    if(it!= name_index.end()) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+pair<int,int> input(vector<vector<string>>& vec_of_func, map<string,int>& name_index){
+    int num_of_func, k1, k2;
+    cin>>num_of_func>>k1>>k2;
+    for(int i = 0; i< num_of_func; i++){
+        vector<string> temp;
+        string func_name;
+        cin>>func_name;
+        name_index[func_name]=i;
+        while(true){
+            string t;
+            cin>>t;
+            temp.push_back(t);
+            if(t=="$") {
+                break;
+            }
+        }
+        temp.push_back(func_name);
+        vec_of_func.push_back(temp);
+    }
+    return k1,k2;
+}
+
+void output(vector<pair<string,string>> result, int time){
+    if(time>result.size()) {
+        cout<<"NONE"<<endl;
+    }
+    else {
+        cout<<result[time-1].first<<"-"<<result[time-1].second<<endl;
+    }
+}
+
+int main(){
+    map<string,int> name_index;
+    vector<vector<string>> vec_of_func;
+    vector<pair<string,string>> result;
+    pair<int,int> time = input(vec_of_func, name_index);
+    result = compute(vec_of_func, name_index);
+    output(result, time.first);
+    output(result, time.second);
+}

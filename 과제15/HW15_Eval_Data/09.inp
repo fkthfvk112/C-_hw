@@ -1,0 +1,40 @@
+100000
+compact
+write aa 5000
+write ab 5000
+write ad 5000
+write ae 5000
+write af 5000
+write ag 5000
+write ah 5000
+write ai 5000
+write aj 5000
+write ak 5000
+show aj
+write ba 5000
+write bb 5000
+write bd 5000
+write be 5000
+write bf 5000
+write bg 5000
+show ab
+write bh 5000
+write bi 5000
+write bj 5000
+show bj
+write bk 5000
+delete ad
+delete af
+delete ag
+delete ba
+delete bi
+write bigA 25000
+show bigA
+delete ah
+delete bb
+delete bc
+delete bd
+delete bj
+write bigB 20000
+show bigB
+end

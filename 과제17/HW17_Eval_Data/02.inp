@@ -1,0 +1,36 @@
+bool comp(Song a, Song b) {
+    if(a.show_cnt == b.show_cnt) {
+        if(a.down_cnt == b.down_cnt) {
+            return a.file_size < b.file_size;
+        }
+        return a.down_cnt > b.down_cnt;
+    }
+    return a.show_cnt > b.show_cnt;
+}
+
+int main() {
+    int N, k;
+    cin >> N >> k;
+    vector<Song> jamong;
+    Song song;
+
+    for(int i=0; i<N; i++) {
+        cin >> song.title >> song.genre >> song.show_cnt >> song.file_size >> song.down_cnt;
+        jamong.push_back(song);
+    }
+    sort(jamong.begin(), jamong.end(), comp);
+    for(int i=0; i<N-1; i++) {
+        if(jamong[i].genre == jamong[i+1].genre) {
+            for(int j=i+2; j<N; j++) {
+                if(jamong[i].genre != jamong[j].genre) {
+                    jamong.insert(jamong.begin()+i+1,jamong[j]);
+                    jamong.erase(jamong.begin()+j+1);
+                    break;
+                }
+            }
+        }
+    }
+
+    cout << jamong[k-1].title;
+    return 0;
+}

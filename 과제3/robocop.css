@@ -1,0 +1,134 @@
+#include <stdio.h>
+#include <iostream>
+#include <vector>
+#include <queue>
+
+#define TOP 0
+#define RIGHT 1
+#define BOTTOM 2
+#define LEFT 3
+
+using namespace std;
+
+class Point{
+public:
+    int point_x;
+    int point_y;
+public:
+    Point(int x= -1, int y = -1):point_x(x), point_y(y){};
+};
+
+class Node{
+private:
+    int nodeNumber;
+    vector <Point> nodeList;
+    Point currentNode;
+    Point nextNode;
+    int direction;
+    Point currentLocation;
+public:
+    Node(int _nodeNumber){
+        nodeNumber = _nodeNumber;
+    };
+    void addNode(Point p){
+        nodeList.push_back(p);//노드 추가
+    };
+    void setNodeLocation(){
+        if(nodeList.size()>1){
+            currentNode = nodeList[0];
+            nextNode = nodeList[1];
+            currentLocation = nodeList[0];
+            setDirection();
+        }
+        else cout<<"there aren't enough node"<<endl;
+    }
+
+    void setDirection(){
+        int dx;
+        int dy;
+        dx = nextNode.point_x - currentNode.point_x;
+        dy = nextNode.point_y - currentNode.point_y;
+        if(dx == 0 && dy > 0) direction = TOP;
+        else if(dx == 0 && dy < 0) direction = BOTTOM;
+        else if(dx < 0 && dy == 0) direction = LEFT;
+        else if(dx > 0 && dy == 0) direction = RIGHT;
+        else direction = -1;
+    }//방향 초기화
+
+    void inTheNode(){
+        bool isIn = 0;
+        for(int i = 0; i < nodeNumber; i++){
+            if(currentLocation.point_x == nodeList[i].point_x &&
+               currentLocation.point_y == nodeList[i].point_y){
+            currentNode = nodeList[i%nodeNumber];
+            nextNode = nodeList[(i+1)%nodeNumber];
+            setDirection();
+            isIn = 1;
+            break;//현재 위치가 노드 상에 존재하는지 파악
+            }
+        }
+    }
+
+    void move(queue <int> times, int maxtime){
+        int cnt = 0;
+        while(cnt < maxtime){
+            switch(direction){
+            case TOP:
+                currentLocation.point_y ++;
+                inTheNode();
+                break;
+            case RIGHT:
+                currentLocation.point_x ++;
+                inTheNode();
+                break;
+            case BOTTOM:
+                currentLocation.point_y --;
+                inTheNode();
+                break;
+            case LEFT:
+                currentLocation.point_x --;
+                inTheNode();
+                break;
+            }
+
+            if(cnt+1 == times.front()){
+                cout<<currentLocation.point_x<<" "<<currentLocation.point_y<<endl;
+                times.pop();
+                currentLocation = nodeList[0];
+                cnt = -1;
+            }
+            cnt++;
+        }
+    }
+};
+
+
+int main(void){
+    int nodeNum = 0;
+    queue <int> time;
+    int tempTime[5];
+    int maxtime = 0;
+
+    //cout<<"꼭지점의 개수 입력 : "<<endl;
+    cin>>nodeNum;
+    Node node = Node(nodeNum);
+    //cout<<"꼭지점 입력 : "<<endl;
+    for(int i = 0; i < nodeNum; i++){
+        int x;
+        int y;
+        cin>>x>>y;
+        node.addNode(Point(x, y));
+    }
+    node.setNodeLocation();
+
+   //cout<<"시간 입력: "<<endl;
+    cin>>tempTime[0]>>tempTime[1]>>tempTime[2]>>tempTime[3]>>tempTime[4];
+    for(int i= 0; i<5;i++){
+            if(maxtime < tempTime[i])
+                maxtime = tempTime[i];
+        time.push(tempTime[i]);
+    }
+    node.move(time, maxtime);//함수 내에서 출력까지 하도록 설정
+
+    return 0;
+}

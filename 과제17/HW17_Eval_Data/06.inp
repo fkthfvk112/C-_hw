@@ -1,0 +1,37 @@
+void input(){
+    int jisu, rp;
+    cin >> N;
+    while(N > 0){
+        cin >> poly_n;
+        while(poly_n > 0){
+            cin >> rp >> jisu;
+            if(max_jisu < jisu) {
+                max_jisu = jisu;
+            }
+            poly[jisu+1000] += rp;
+            poly_n--;
+        }
+        N--;
+    }
+}
+
+void output(){
+    int term_count = MAX_poly - count(poly.begin(), poly.end(), 0);
+
+    if(term_count){
+        cout << term_count << "\n";
+        for(auto i = poly.begin() + max_jisu+1000; i >= poly.begin(); i--){
+            if(*i) {
+                cout << *i << " " << (i - poly.begin())-1000 << "\n";
+            }
+        }
+    } else {
+        cout << "0 0\n";
+    }
+}
+
+int main() {
+    input();
+    output();
+    return 0;
+}
