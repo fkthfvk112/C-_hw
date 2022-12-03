@@ -39,10 +39,12 @@ public:
 
     void topToBottom() {
         if (this->child1 != NULL) { //from bottom
+            //cout << "swap : " << this->data << this->child1->data << endl;
             swapTwoData(this, this->child1);
             this->child1->topToBottom();
         }
         else if (this->child2 != NULL) {
+            //cout << "swap : " << this->data << this->child2->data << endl;
             swapTwoData(this, this->child2);
             this->child2->topToBottom();
         }
@@ -51,10 +53,12 @@ public:
     void bottomToUp() {//to private
         if (this->child1 != NULL) { //from bottom
             this->child1->bottomToUp();
+            //cout << "swap : " << this->data << this->child1->data << endl;
             swapTwoData(this, this->child1);
         }
         else if (this->child2 != NULL) {
             this->child2->bottomToUp();
+            //cout << "swap : " << this->data << this->child2->data << endl;
             swapTwoData(this, this->child2);
         }
     }
@@ -96,21 +100,6 @@ public:
 
         return searchedPointer;
     }
-    int depth() {
-        int dn;
-        int dl = 0;
-        int dr = 0;
-        if (child1 != NULL) {
-            dl += child1->depth();
-        }
-        if (child2 != NULL) {
-            dr += child2->depth();
-        }
-        if (dl > dr) dn = dl;
-        else dn = dr;
-
-        return ++dn;
-    }
 
     void printDepthN(int goalDepth, int nowSearchingDepth = 0) {
         if (goalDepth == nowSearchingDepth) cout << this->data << " ";
@@ -123,6 +112,21 @@ public:
             child2->printDepthN(goalDepth, nowSearchingDepth);
 
         }
+    }
+    int depth(){
+        int dn;
+        int dl = 0;
+        int dr = 0;
+        if(child1 != NULL){
+            dl += child1->depth();
+        }
+        if(child1 != NULL){
+            dr += child2->depth();
+        }
+        if(dl>dr) dn = dl;
+        else dn = dr;
+        dn++;
+        return dn;
     }
     void printLeaf() {
         if (child1 != NULL) child1->printLeaf();
@@ -153,12 +157,11 @@ int main() {
         if (inputString == "depth") {
             int depthNumer;
             cin >> depthNumer;
-            if (!(root->child2->depth() < depthNumer)) {
-                root->printDepthN(depthNumer);
-                cout << endl;
-            }
-            else cout<<"NO"<<endl;
+            root->printDepthN(depthNumer);
+            cout<<"µ¥"<<root->depth()<<endl;
+            cout << endl;
         }
     }
+
     return 0;
 }
